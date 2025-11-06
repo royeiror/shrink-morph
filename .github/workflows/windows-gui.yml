@@ -2,9 +2,9 @@ name: Build Shrink Morph GUI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -16,16 +16,20 @@ jobs:
       with:
         submodules: true
 
-- name: Install vcpkg and dependencies
-  run: |
-    git clone https://github.com/microsoft/vcpkg.git
-    .\vcpkg\bootstrap-vcpkg.bat
-    .\vcpkg\vcpkg install glfw3
-    .\vcpkg\vcpkg install opengl
+    - name: Install CMake and Python
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+        choco install python3
 
+    - name: Install vcpkg and dependencies
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git
+        .\vcpkg\bootstrap-vcpkg.bat
+        .\vcpkg\vcpkg install glfw3
+        .\vcpkg\vcpkg install opengl
 
     - name: Configure CMake
-      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
 
     - name: Build GUI
       run: cmake --build build --target ShrinkMorphGUI --config Release
