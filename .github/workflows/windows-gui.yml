@@ -1,4 +1,4 @@
-name: Build Shrink Morph GUI
+name: Build-Shrink Morph GUI
 
 on:
   push:
