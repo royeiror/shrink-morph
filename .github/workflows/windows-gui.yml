@@ -29,7 +29,7 @@ jobs:
         .\vcpkg\vcpkg install opengl
 
     - name: Configure CMake
-      run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
+      run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release
 
     - name: Build GUI
       run: cmake --build build --target ShrinkMorphGUI --config Release
