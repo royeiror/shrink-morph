@@ -6,6 +6,8 @@ project(shrink_morph)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+
 
 ### Configuration
 set(SHRINK_MORPH_ROOT "${CMAKE_CURRENT_LIST_DIR}")
