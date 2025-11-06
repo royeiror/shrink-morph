@@ -30,7 +30,7 @@ jobs:
       run: cmake --build build --target ShrinkMorphGUI --config Release
 
     - name: Upload GUI executable
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: shrink-morph-gui
         path: build/Release/ShrinkMorphGUI.exe
