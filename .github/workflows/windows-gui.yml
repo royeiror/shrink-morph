@@ -1,0 +1,36 @@
+name: Build Shrink Morph GUI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+        choco install python
+        choco install glfw
+        choco install opengl
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build GUI
+      run: cmake --build build --target ShrinkMorphGUI --config Release
+
+    - name: Upload GUI executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: shrink-morph-gui
+        path: build/Release/ShrinkMorphGUI.exe
