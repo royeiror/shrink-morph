@@ -2,44 +2,39 @@ name: Build Shrink Morph GUI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        submodules: true
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
-    - name: Install CMake and Python
-      run: |
-        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-        choco install python3
+      - name: Install CMake and Python
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+          choco install python3
 
-    - name: Install vcpkg and dependencies
-      run: |
-        git clone https://github.com/microsoft/vcpkg.git
-        .\vcpkg\bootstrap-vcpkg.bat
-        .\vcpkg\vcpkg install glfw3 opengl imgui
+      - name: Install vcpkg and dependencies
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install glfw3 opengl imgui
 
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DSHRINK_MORPH_USE_SUITESPARSE=OFF -DSHRINK_MORPH_USE_MKL=OFF
 
-   - name: Configure CMake
-      run: cmake -S . -B build ^
-    -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake ^
-    -DCMAKE_BUILD_TYPE=Release ^
-    -DSHRINK_MORPH_USE_SUITESPARSE=OFF ^
-    -DSHRINK_MORPH_USE_MKL=OFF
+      - name: Build GUI
+        run: cmake --build build --target ShrinkMorphGUI --config Release
 
-    - name: Build GUI
-      run: cmake --build build --target ShrinkMorphGUI --config Release
-
-    - name: Upload GUI executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: shrink-morph-gui
-        path: build/Release/ShrinkMorphGUI.exe
+      - name: Upload GUI executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: shrink-morph-gui
+          path: build/Release/ShrinkMorphGUI.exe
