@@ -1,11 +1,9 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
-#include "shrink_morph_app.h"  // Include core logic
+#include "shrink_morph_app.h"
+
 
 int main() {
     glfwInit();
