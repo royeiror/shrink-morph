@@ -1,10 +1,9 @@
-name: Build Shrink Morph GUI
+name: Build Windows Binary
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -12,29 +11,33 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+        uses: actions/checkout@v4
 
-      - name: Install CMake and Python
-        run: |
-          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
-          choco install python3
-
-      - name: Install vcpkg and dependencies
+      - name: Install vcpkg
         run: |
           git clone https://github.com/microsoft/vcpkg.git
-          .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg install glfw3 opengl imgui
+          cd vcpkg
+          .\bootstrap-vcpkg.bat
+
+      - name: Install dependencies
+        run: |
+          .\vcpkg\vcpkg.exe install cgal:x64-windows boost:x64-windows eigen3:x64-windows cli11:x64-windows glfw3:x64-windows suitesparse:x64-windows
+          .\vcpkg\vcpkg.exe integrate install
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DSHRINK_MORPH_USE_SUITESPARSE=OFF -DSHRINK_MORPH_USE_MKL=OFF
+        run: |
+          cmake -B build -S . `
+            -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DFABSIM_BUILD_TESTS=OFF
 
-      - name: Build GUI
-        run: cmake --build build --target ShrinkMorphGUI --config Release
+      - name: Build
+        run: cmake --build build --config Release
 
-      - name: Upload GUI executable
+      - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
-          name: shrink-morph-gui
-          path: build/Release/ShrinkMorphGUI.exe
+          name: fabsim-windows
+          path: |
+            build/Release/*.exe
+            build/Release/*.dll
