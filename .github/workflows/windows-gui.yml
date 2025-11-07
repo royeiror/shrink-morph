@@ -12,22 +12,33 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
-      - name: Install vcpkg and dependencies
+      - name: Install vcpkg
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg install glfw opengl imgui
-
 
       - name: Install dependencies
         run: |
-          .\vcpkg\vcpkg.exe install cgal:x64-windows boost:x64-windows eigen3:x64-windows cli11:x64-windows glfw3:x64-windows suitesparse:x64-windows
+          .\vcpkg\vcpkg.exe install ^
+            cgal:x64-windows ^
+            boost:x64-windows ^
+            eigen3:x64-windows ^
+            cli11:x64-windows ^
+            glfw3:x64-windows ^
+            opengl:x64-windows ^
+            imgui:x64-windows ^
+            suitesparse:x64-windows
           .\vcpkg\vcpkg.exe integrate install
 
       - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DSHRINK_MORPH_USE_SUITESPARSE=OFF -DSHRINK_MORPH_USE_MKL=OFF
-
+        run: cmake -S . -B build ^
+          -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake ^
+          -DCMAKE_BUILD_TYPE=Release ^
+          -DSHRINK_MORPH_USE_SUITESPARSE=OFF ^
+          -DSHRINK_MORPH_USE_MKL=OFF
 
       - name: Build
         run: cmake --build build --config Release
@@ -35,7 +46,7 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
-          name: fabsim-windows
+          name: shrink-morph-windows
           path: |
             build/Release/*.exe
             build/Release/*.dll
