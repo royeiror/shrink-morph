@@ -22,16 +22,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          .\vcpkg\vcpkg.exe install ^
-            cgal:x64-windows ^
-            boost:x64-windows ^
-            eigen3:x64-windows ^
-            cli11:x64-windows ^
-            glfw3:x64-windows ^
-            opengl:x64-windows ^
-            imgui:x64-windows ^
-            suitesparse:x64-windows
-          .\vcpkg\vcpkg.exe integrate install
+          .\vcpkg\vcpkg.exe install `
+          cgal:x64-windows `
+          boost:x64-windows `
+          eigen3:x64-windows `
+          cli11:x64-windows `
+          glfw3:x64-windows `
+          opengl:x64-windows `
+          imgui:x64-windows `
+          suitesparse:x64-windows
+
 
       - name: Configure CMake
         run: cmake -S . -B build ^
