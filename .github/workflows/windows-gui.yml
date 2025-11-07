@@ -17,7 +17,7 @@ jobs:
         run: |
           git clone https://github.com/microsoft/vcpkg.git
           .\vcpkg\bootstrap-vcpkg.bat
-          .\vcpkg\vcpkg install glfw3 opengl imgui
+          .\vcpkg\vcpkg install glfw opengl imgui
 
 
       - name: Install dependencies
