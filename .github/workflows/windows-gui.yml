@@ -13,11 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install vcpkg
+      - name: Install vcpkg and dependencies
         run: |
           git clone https://github.com/microsoft/vcpkg.git
-          cd vcpkg
-          .\bootstrap-vcpkg.bat
+          .\vcpkg\bootstrap-vcpkg.bat
+          .\vcpkg\vcpkg install glfw3 opengl imgui
+
 
       - name: Install dependencies
         run: |
@@ -25,11 +26,8 @@ jobs:
           .\vcpkg\vcpkg.exe integrate install
 
       - name: Configure CMake
-        run: |
-          cmake -B build -S . `
-            -DCMAKE_TOOLCHAIN_FILE="${{ github.workspace }}\vcpkg\scripts\buildsystems\vcpkg.cmake" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DFABSIM_BUILD_TESTS=OFF
+        run: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DSHRINK_MORPH_USE_SUITESPARSE=OFF -DSHRINK_MORPH_USE_MKL=OFF
+
 
       - name: Build
         run: cmake --build build --config Release
