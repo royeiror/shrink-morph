@@ -1,5 +1,5 @@
 find_package(OpenGL REQUIRED)
-find_package(glfw CONFIG REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 
 add_executable(ShrinkMorphGUI
@@ -15,7 +15,7 @@ target_include_directories(ShrinkMorphGUI PRIVATE
 
 target_link_libraries(ShrinkMorphGUI PRIVATE
   shrink_morph
-  glfw
+  glfw3
   imgui::imgui
   OpenGL::GL
 )
