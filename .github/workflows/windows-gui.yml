@@ -1,4 +1,4 @@
-name: Build Windows Binary
+name: Build Windows GUI
 
 on:
   workflow_dispatch:
@@ -33,10 +33,15 @@ jobs:
             suitesparse:x64-windows
           .\vcpkg\vcpkg.exe integrate install
 
+      - name: Clean build directory
+        run: |
+          if (Test-Path -Path "build") { Remove-Item -Recurse -Force build }
+
       - name: Configure CMake
         run: cmake -S . -B build `
           -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake `
           -DVCPKG_TARGET_TRIPLET=x64-windows `
+          -DCMAKE_PREFIX_PATH=${{ github.workspace }}/vcpkg/installed/x64-windows/share `
           -DCMAKE_BUILD_TYPE=Release `
           -DSHRINK_MORPH_USE_SUITESPARSE=OFF `
           -DSHRINK_MORPH_USE_MKL=OFF
