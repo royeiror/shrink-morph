@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(ShrinkMorphGUI)
 
 find_package(OpenGL REQUIRED)
+set(GLFW_USE_STATIC ON)
 find_package(glfw3 CONFIG REQUIRED)
 message(STATUS "glfw3 package found: ${glfw3_DIR}")
 find_package(imgui CONFIG REQUIRED)
