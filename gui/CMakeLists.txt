@@ -3,6 +3,7 @@ project(ShrinkMorphGUI)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+message(STATUS "glfw3 package found: ${glfw3_DIR}")
 find_package(imgui CONFIG REQUIRED)
 
 add_executable(ShrinkMorphGUI
