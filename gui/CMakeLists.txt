@@ -3,7 +3,7 @@ project(ShrinkMorphGUI)
 
 find_package(OpenGL REQUIRED)
 set(GLFW_USE_STATIC ON)
-find_package(glfw3 CONFIG REQUIRED)
+find_package(glfw CONFIG REQUIRED)
 message(STATUS "glfw3 package found: ${glfw3_DIR}")
 find_package(imgui CONFIG REQUIRED)
 
@@ -20,7 +20,7 @@ target_include_directories(ShrinkMorphGUI PRIVATE
 
 # Check if glfw3 target exists
 if(TARGET glfw3)
-  target_link_libraries(ShrinkMorphGUI PRIVATE glfw3)
+  target_link_libraries(ShrinkMorphGUI PRIVATE glfw)
 else()
   message(WARNING "glfw3 target not found, falling back to PkgConfig::glfw3")
   find_package(PkgConfig REQUIRED)
